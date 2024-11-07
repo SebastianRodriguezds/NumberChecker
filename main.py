@@ -1,27 +1,49 @@
-import random
-random_number = random.randint(1, 100)
+from random import randint
+import logo
 
-def searchForSpecificNumber(guess):
-  if random_number == guess:
-    print("Perfecto")
-  elif guess > random_number:
-    print("To hi")
-  elif guess < random_number:
-    print("To low")
+EASY_LEVEL_TURNS = 10
+HARD_LEVEL_TURNS = 5
+
+turns = 0
+
+print(logo.logo)
+
+def check_answer(user_guess, actual_answer, turns):
+  """Checks answer against guess, returns the number of turns remaining."""
+  if user_guess > actual_answer:
+    print("Too high.")
+    return turns - 1
+  elif user_guess < actual_answer:
+    print("Too low.")
+    return turns -1
+  else:
+    print(f"You got it! The answer was {actual_answer}")
+
+
+def set_difficulty():
+  level = input("Choose a difficulty. Type 'easy' or 'hard': ")
+  if level == 'easy':
+    return  EASY_LEVEL_TURNS
+  else:
+    return  HARD_LEVEL_TURNS
+
+def game():
+  # Choosing a random number between 1 and 100.
+  print("Welcome to the Number Guessing Game!\nI am thinking of a number between 1 and 100.")
+  answer = randint(1, 100)
+  print(f"{answer}")
+
+  turns = set_difficulty()
   
-print("Welcome to the Number Guessing Game! \n I am thinking of a number between 1 and 100.")
-user_Level = input("Choose a difficulty. Type 'easy' or 'hard': ").lower()
-user_lifes = 0
-
-
-if user_Level == 'hard':
-  user_lifes = 5
-  print("You have 5 attempts remaining to guess the number.")
-elif user_Level == 'easy':
-  user_lifes = 10
-  print("You have 10 attempts remaining to guess the number.")
-
-while user_lifes > 0:
-  user_number = int(input("Make a guess: "))
-  searchForSpecificNumber(user_number)
-
+  guess = 0
+  while guess != answer: 
+    print(f"You have {turns} attempts remaining to guess the number.")
+    #Let the user guess a number
+    guess = int(input("Make a guess: "))
+    turns = check_answer(guess, answer, turns)
+    if turns == 0:
+      print(f"You've run out of guesses, you lose.")
+      return
+    elif guess != answer:
+      print("Guess again.")
+game()
